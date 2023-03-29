@@ -16,5 +16,5 @@ void Stack_Push(Stack *stack, unsigned short entry) {
 }
 
 unsigned short Stack_Pop(Stack *stack) {
-    return stack->entries[stack->pointer--];
+    return stack->entries[--stack->pointer];
 }
