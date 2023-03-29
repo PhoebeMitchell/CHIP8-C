@@ -14,12 +14,26 @@ int main() {
         memory[FONT_SET_ADDRESS + i] = FONT_SET[i];
     }
 
+    // Initialise timers
+    float delayTimer = 0;
+    float soundTimer = 0;
+
     // Create window
     Window window;
     Window_Initialise();
     Window_Create(&window, WINDOW_NAME, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_SCALE, 60);
     while (window.isOpen) {
-        Window_Update(&window);
+        // Check if should update
+        if (!Window_Update(&window)) {
+            continue;
+        }
+
+        // Update timers;
+        delayTimer -= 1;
+        soundTimer -= 1;
+
+        // Present window
+        Window_Present(&window);
     }
     return 0;
 }

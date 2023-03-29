@@ -55,12 +55,12 @@ void Window_SetPixel(Window *window, int x, int y, int r, int g, int b, int a) {
     SDL_RenderFillRect(window->renderer, &rect);
 }
 
-void Window_Update(Window *window) {
+char Window_Update(Window *window) {
     Window_PollEvents(window);
     uint64 time = SDL_GetTicks64();
     if (window->updateData.lastUpdate + window->updateData.interval > time) {
-        return;
+        return 0;
     }
     window->updateData.lastUpdate = time;
-    Window_Present(window);
+    return 1;
 }

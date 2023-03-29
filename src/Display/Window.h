@@ -27,6 +27,6 @@ void Window_Close(Window *window);
 void Window_PollEvents(Window *window);
 void Window_Present(Window *window);
 void Window_SetPixel(Window *window, int x, int y, int r, int g, int b, int a);
-void Window_Update(Window *window);
+char Window_Update(Window *window);
 
 #endif //CHIP8_C_WINDOW_H
