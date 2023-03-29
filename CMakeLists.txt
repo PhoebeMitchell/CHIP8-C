@@ -7,4 +7,9 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(CHIP8_C main.c src/Architecture/Memory.c src/Architecture/Memory.h src/Font.h src/Display/Window.c src/Display/Window.h src/Architecture/Stack.c src/Architecture/Stack.h)
+
 target_link_libraries(CHIP8_C ${SDL2_LIBRARIES})
+
+include(CTest)
+add_subdirectory(external)
+add_subdirectory(tests)

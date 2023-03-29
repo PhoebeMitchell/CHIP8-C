@@ -10,4 +10,8 @@ typedef struct {
     unsigned char pointer;
 } Stack;
 
+Stack Stack_Create();
+void Stack_Push(Stack *stack, unsigned short entry);
+unsigned short Stack_Pop(Stack *stack);
+
 #endif //CHIP8_C_STACK_H
