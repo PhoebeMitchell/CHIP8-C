@@ -5,7 +5,7 @@
 #ifndef CHIP8_C_SYSTEM_H
 #define CHIP8_C_SYSTEM_H
 
-#include "Display/Window.h"
+#include "Interface/Window.h"
 #include "Architecture/Memory.h"
 #include "Architecture/Processor.h"
 #include "Architecture/Stack.h"

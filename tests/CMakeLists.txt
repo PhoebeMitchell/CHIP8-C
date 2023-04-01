@@ -1,11 +1,14 @@
 add_executable(memoryTests MemoryTests.c ../src/Architecture/Memory.h ../src/Architecture/Memory.c)
 add_executable(stackTests StackTests.c ../src/Architecture/Stack.h ../src/Architecture/Stack.c)
 add_executable(processorTests ProcessorTests.c ../src/Architecture/Processor.h ../src/Architecture/Processor.c ../src/Architecture/Memory.h ../src/Architecture/Memory.c)
+add_executable(displayTests DisplayTests.c ../src/Architecture/Display.h ../src/Architecture/Display.c)
 
 target_link_libraries(memoryTests Unity)
 target_link_libraries(stackTests Unity)
 target_link_libraries(processorTests Unity)
+target_link_libraries(displayTests Unity)
 
 add_test(MemoryTests memoryTests)
 add_test(StackTests stackTests)
 add_test(ProcessorTests processorTests)
+add_test(DisplayTests displayTests)

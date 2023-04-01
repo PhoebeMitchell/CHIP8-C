@@ -22,6 +22,8 @@ typedef struct {
 typedef struct {
     int frequency;
     int pc;
+    short I;
+    unsigned char V[16];
 } Processor;
 
 Processor Processor_Create(int frequency);
