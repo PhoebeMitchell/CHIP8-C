@@ -12,15 +12,13 @@ int Window_Initialise() {
     return -1;
 }
 
-int Window_Create(Window *window, char *title, int width, int height, int scale, int fps) {
+int Window_Create(Window *window, char *title, int width, int height, int scale) {
     SDL_CreateWindowAndRenderer(width * scale, height * scale, 0, &window->window, &window->renderer);
     if (window->window == NULL || window->renderer == NULL) {
         printf("Failed to create SDL window and renderer: %s\n", SDL_GetError());
         return -1;
     }
     SDL_SetWindowTitle(window->window, title);
-    window->updateData.interval = 1000.0f / fps;
-    window->updateData.lastUpdate = SDL_GetTicks64();
     window->isOpen = 1;
     window->scale = scale;
     return 0;
@@ -55,12 +53,7 @@ void Window_SetPixel(Window *window, int x, int y, int r, int g, int b, int a) {
     SDL_RenderFillRect(window->renderer, &rect);
 }
 
-char Window_Update(Window *window) {
-    Window_PollEvents(window);
-    uint64 time = SDL_GetTicks64();
-    if (window->updateData.lastUpdate + window->updateData.interval > time) {
-        return 0;
-    }
-    window->updateData.lastUpdate = time;
-    return 1;
+void Window_Clear(Window *window, SDL_Color clearColor) {
+    SDL_SetRenderDrawColor(window->renderer, clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    SDL_RenderClear(window->renderer);
 }
