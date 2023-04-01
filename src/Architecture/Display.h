@@ -10,7 +10,7 @@
 #define PIXEL_OFF 0
 #define PIXEL_ON 1
 
-#define LinearCoordinate(x, y) y * DISPLAY_WIDTH + x
+#define Display_LinearCoordinate(x, y) y * DISPLAY_WIDTH + x
 
 typedef char Display[DISPLAY_WIDTH * DISPLAY_HEIGHT];
 

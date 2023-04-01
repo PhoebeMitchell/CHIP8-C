@@ -27,7 +27,7 @@ void test_Set() {
     Display_Clear(display);
     const char X = 4;
     const char Y = 32;
-    int LINEAR_COORDINATE = LinearCoordinate(X, Y);
+    int LINEAR_COORDINATE = Display_LinearCoordinate(X, Y);
     TEST_ASSERT_EQUAL_CHAR(PIXEL_OFF, display[LINEAR_COORDINATE]);
     Display_Set(display, X, Y, PIXEL_ON);
 

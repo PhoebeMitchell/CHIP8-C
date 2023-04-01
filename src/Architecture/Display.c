@@ -2,7 +2,6 @@
 // Created by Phoebe Mitchell on 01/04/2023.
 //
 
-#include <printf.h>
 #include "Display.h"
 
 void Display_Clear(Display display) {
@@ -13,5 +12,5 @@ void Display_Clear(Display display) {
 }
 
 void Display_Set(Display display, int x, int y, char value) {
-    display[LinearCoordinate(x, y)] = value;
+    display[Display_LinearCoordinate(x, y)] = value;
 }

@@ -21,6 +21,7 @@ typedef struct {
     Memory memory;
     Processor processor;
     Stack stack;
+    Display display;
     int delayTimer;
     int soundTimer;
     UpdateData updateData;

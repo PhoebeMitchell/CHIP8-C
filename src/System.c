@@ -20,6 +20,7 @@ const SDL_Color CLEAR_COLOR = {0,0,0,0};
 
 System System_Create() {
     System system;
+    Display_Clear(system.display);
     system.soundTimer = 0;
     system.delayTimer = 0;
     system.updateData.interval = 1000.0f / WINDOW_FPS;
@@ -89,7 +90,12 @@ void System_Execute(System *system, DecodedInstruction decodedInstruction) {
                     const int BYTE_SIZE = 8;
                     for (int i = BYTE_SIZE - 1; i >= 0; i--) {
                         if (data >> i) {
-
+                            if (system->display[Display_LinearCoordinate(x, y)]) {
+                                Display_Set(system->display, x, y, 0);
+                                system->processor.V[0xF] = 1;
+                            } else {
+                                Display_Set(system->display, x, y, 1);
+                            }
                         }
                     }
                 }
@@ -113,5 +119,6 @@ void System_Update(System *system) {
     DecodedInstruction decodedInstruction = Processor_Decode(instruction);
     System_Execute(system, decodedInstruction);
 
+    Window_DrawDisplay(&system->window, &system->display);
     Window_Present(&system->window);
 }
