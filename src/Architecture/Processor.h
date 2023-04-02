@@ -13,7 +13,7 @@ typedef struct {
 } Instruction;
 
 typedef struct {
-    unsigned char a;
+    unsigned char op;
     unsigned char X;
     unsigned char Y;
     unsigned char N;
@@ -22,7 +22,7 @@ typedef struct {
 typedef struct {
     int frequency;
     int pc;
-    short I;
+    unsigned short I;
     unsigned char V[16];
 } Processor;
 

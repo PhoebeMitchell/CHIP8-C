@@ -6,6 +6,7 @@
 #define CHIP8_C_MEMORY_H
 
 #define MEMORY_SIZE 4096
+#define PROGRAM_ADDRESS 0x200
 
 typedef unsigned char Memory[MEMORY_SIZE];
 

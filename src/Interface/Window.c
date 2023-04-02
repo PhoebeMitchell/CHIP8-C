@@ -62,6 +62,6 @@ void Window_DrawDisplay(Window *window, char *display) {
     for (int i = 0; i < DISPLAY_HEIGHT * DISPLAY_WIDTH; i++) {
         int row = i / DISPLAY_WIDTH;
         int value = 255 * display[i];
-        Window_SetPixel(window, i - row, row, value, value, value, value);
+        Window_SetPixel(window, i - (row * DISPLAY_WIDTH), row, value, value, value, value);
     }
 }

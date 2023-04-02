@@ -6,7 +6,7 @@
 
 Processor Processor_Create(int frequency) {
     Processor processor;
-    processor.pc = 0;
+    processor.pc = PROGRAM_ADDRESS;
     processor.frequency = frequency;
     return processor;
 }
@@ -20,7 +20,7 @@ Instruction Processor_Fetch(Processor *processor, Memory memory) {
 
 DecodedInstruction Processor_Decode(Instruction instruction) {
     DecodedInstruction decodedInstruction;
-    decodedInstruction.a = (instruction.a & 0xF0) >> 4;
+    decodedInstruction.op = (instruction.a & 0xF0) >> 4;
     decodedInstruction.X = instruction.a & 0xF;
     decodedInstruction.Y = (instruction.NN & 0xF0) >> 4;
     decodedInstruction.N = instruction.NN & 0xF;

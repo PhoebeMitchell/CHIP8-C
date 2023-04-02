@@ -30,7 +30,7 @@ void test_Decode() {
     instruction.a = TEST_MEMORY_VALUE_A;
     instruction.NN = TEST_MEMORY_VALUE_NN;
     DecodedInstruction decodedInstruction = Processor_Decode(instruction);
-    TEST_ASSERT_EQUAL_CHAR(0xF, decodedInstruction.a);
+    TEST_ASSERT_EQUAL_CHAR(0xF, decodedInstruction.op);
     TEST_ASSERT_EQUAL_CHAR(0x1, decodedInstruction.X);
     TEST_ASSERT_EQUAL_CHAR(0x8, decodedInstruction.Y);
     TEST_ASSERT_EQUAL_CHAR(0xE, decodedInstruction.N);
