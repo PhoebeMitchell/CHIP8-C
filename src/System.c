@@ -20,6 +20,7 @@ const SDL_Color CLEAR_COLOR = {0,0,0,0};
 
 System System_Create() {
     System system;
+    srand(time(NULL));
     Display_Clear(system.display);
     system.soundTimer = 0;
     system.delayTimer = 0;
@@ -69,16 +70,65 @@ void System_NotSkipEqual_VX_VY(System *system, DecodedInstruction decodedInstruc
     }
 }
 
-void System_Set(System *system, DecodedInstruction decodedInstruction) {
+void System_Set_NN(System *system, DecodedInstruction decodedInstruction) {
     system->processor.V[decodedInstruction.X] = NN(decodedInstruction.Y << 4, decodedInstruction.N);
 }
 
-void System_Add(System *system, DecodedInstruction decodedInstruction) {
+void System_Add_NN(System *system, DecodedInstruction decodedInstruction) {
     system->processor.V[decodedInstruction.X] += NN(decodedInstruction.Y, decodedInstruction.N);
 }
 
 void System_SetIndex(System *system, DecodedInstruction decodedInstruction) {
     system->processor.I = NNN(decodedInstruction.X, decodedInstruction.Y, decodedInstruction.N);
+}
+
+void System_Set_VY(Processor *processor, unsigned char X, unsigned char Y) {
+    processor->V[X] = processor->V[Y];
+}
+
+void System_BinaryOR(Processor *processor, unsigned char X, unsigned char Y) {
+    processor->V[X] |= processor->V[Y];
+}
+
+void System_BinaryAND(Processor *processor, unsigned char X, unsigned char Y) {
+    processor->V[X] &= processor->V[Y];
+}
+
+void System_LogicalXOR(Processor *processor, unsigned char X, unsigned char Y) {
+    processor->V[X] ^= processor->V[Y];
+}
+
+void System_Add_VY(Processor *processor, unsigned char X, unsigned char Y) {
+    unsigned char oldValue = processor->V[X];
+    processor->V[X] += processor->V[Y];
+    processor->V[0xF] = processor->V[X] < oldValue ? 1 : 0;
+}
+
+void System_Subtract(Processor *processor, unsigned char X, unsigned char minuend, unsigned char subtrahend) {
+    processor->V[X] = processor->V[minuend] - processor->V[subtrahend];
+    processor->V[0xF] = minuend >= subtrahend ? 1 : 0;
+}
+
+void System_ShiftLeft(Processor *processor, unsigned char X, unsigned char Y) {
+    processor->V[X] = processor->V[Y];
+    processor->V[0xF] = processor->V[X] & 0x8;
+    processor->V[X] <<= 1;
+}
+
+void System_ShiftRight(Processor *processor, unsigned char X, unsigned char Y) {
+    processor->V[X] = processor->V[Y];
+    processor->V[0xF] = processor->V[X] & 0x1;
+    processor->V[X] >>= 1;
+}
+
+void System_JumpWithOffset(Processor *processor, unsigned short NNN) {
+    processor->pc = NNN + processor->V[0];
+}
+
+void System_Random(Processor *processor, unsigned char X, unsigned short NN) {
+    unsigned char random = rand();
+    random &= NN;
+    processor->V[X] = random;
 }
 
 void System_Display(System *system, DecodedInstruction decodedInstruction) {
@@ -132,16 +182,53 @@ void System_Execute(System *system, DecodedInstruction decodedInstruction) {
             System_SkipEqual_VX_VY(system, decodedInstruction);
             break;
         case 0x6:
-            System_Set(system, decodedInstruction);
+            System_Set_NN(system, decodedInstruction);
             break;
         case 0x7:
-            System_Add(system, decodedInstruction);
+            System_Add_NN(system, decodedInstruction);
+            break;
+        case 0x8:
+            switch (decodedInstruction.N) {
+                case 0x0:
+                    System_Set_VY(&system->processor, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+                case 0x1:
+                    System_BinaryOR(&system->processor, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+                case 0x2:
+                    System_BinaryAND(&system->processor, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+                case 0x3:
+                    System_LogicalXOR(&system->processor, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+                case 0x4:
+                    System_Add_VY(&system->processor, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+                case 0x5:
+                    System_Subtract(&system->processor, decodedInstruction.X, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+                case 0x6:
+                    System_ShiftRight(&system->processor, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+                case 0x7:
+                    System_Subtract(&system->processor, decodedInstruction.X, decodedInstruction.Y, decodedInstruction.X);
+                    break;
+                case 0xE:
+                    System_ShiftLeft(&system->processor, decodedInstruction.X, decodedInstruction.Y);
+                    break;
+            }
             break;
         case 0x9:
             System_NotSkipEqual_VX_VY(system, decodedInstruction);
             break;
         case 0xA:
             System_SetIndex(system, decodedInstruction);
+            break;
+        case 0xB:
+            System_JumpWithOffset(&system->processor, NNN(decodedInstruction.X, decodedInstruction.Y, decodedInstruction.N));
+            break;
+        case 0xC:
+            System_Random(&system->processor, decodedInstruction.X, NN(decodedInstruction.Y, decodedInstruction.N));
             break;
         case 0xD:
             System_Display(system, decodedInstruction);
