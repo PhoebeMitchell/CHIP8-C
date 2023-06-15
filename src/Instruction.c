@@ -7,6 +7,10 @@
 #include "Instruction.h"
 #include "Font.h"
 
+void Instruction_Clear(Display display) {
+    Display_Clear(display);
+}
+
 void Instruction_SubroutineReturn(System *system) {
     system->processor.pc = Stack_Pop(&system->stack);
 }
@@ -27,7 +31,7 @@ void Instruction_SkipEqual_VX_NN(System *system, DecodedInstruction decodedInstr
 }
 
 void Instruction_SkipNotEqual_VX_NN(System *system, DecodedInstruction decodedInstruction) {
-    if (system->processor.V[decodedInstruction.X] != ((decodedInstruction.Y << 4) | decodedInstruction.N)) {
+    if (system->processor.V[decodedInstruction.X] != NN(decodedInstruction.Y, decodedInstruction.N)) {
         system->processor.pc++;
     }
 }
@@ -44,16 +48,16 @@ void Instruction_NotSkipEqual_VX_VY(System *system, DecodedInstruction decodedIn
     }
 }
 
-void Instruction_Set_NN(System *system, DecodedInstruction decodedInstruction) {
-    system->processor.V[decodedInstruction.X] = NN(decodedInstruction.Y << 4, decodedInstruction.N);
+void Instruction_Set_NN(Processor *processor, unsigned char X, unsigned char Y, unsigned char N) {
+    processor->V[X] = NN(Y, N);
 }
 
 void Instruction_Add_NN(System *system, DecodedInstruction decodedInstruction) {
     system->processor.V[decodedInstruction.X] += NN(decodedInstruction.Y, decodedInstruction.N);
 }
 
-void Instruction_SetIndex(System *system, DecodedInstruction decodedInstruction) {
-    system->processor.I = NNN(decodedInstruction.X, decodedInstruction.Y, decodedInstruction.N);
+void Instruction_SetIndex(Processor *processor, unsigned char X, unsigned char Y, unsigned char N) {
+    processor->I = NNN(X, Y, N);
 }
 
 void Instruction_Set(Processor *processor, DecodedInstruction decodedInstruction) {
@@ -112,17 +116,52 @@ void Instruction_Display(System *system, DecodedInstruction decodedInstruction) 
     for (short i = 0; i < decodedInstruction.N; i++) {
         unsigned char data = system->memory[system->processor.I + i];
         const int BYTE_SIZE = 8;
-        for (int j = BYTE_SIZE - 1; j >= 0; j--) {
-            if (data >> j & 0x1) {
-                if (system->display[Display_LinearCoordinate(x + (BYTE_SIZE - j), y + i)]) {
-                    Display_Set(system->display, x + (BYTE_SIZE - j), y + i, 0);
+        for (int j = 0; j < BYTE_SIZE; j++) {
+            if (data >> (BYTE_SIZE - 1 - j) & 0x1) {
+                if (system->display[Display_LinearCoordinate(x + j, y + i)]) {
+                    Display_Set(system->display, x + j, y + i, 0);
                     system->processor.V[0xF] = 1;
                 } else {
-                    Display_Set(system->display, x + (BYTE_SIZE - j), y + i, 1);
+                    Display_Set(system->display, x + j, y + i, 1);
                 }
             }
         }
     }
+//    uint8_t Vx = decodedInstruction.X;
+//    uint8_t Vy = decodedInstruction.Y;
+//    uint8_t height = decodedInstruction.N;
+//
+//    unsigned char *registers = system->processor.V;
+//    // Wrap if going beyond screen boundaries
+//    uint8_t xPos = registers[Vx] % 64;
+//    uint8_t yPos = registers[Vy] % 32;
+//
+//    registers[0xF] = 0;
+//
+//    for (unsigned int row = 0; row < height; ++row)
+//    {
+//        uint8_t spriteByte = system->memory[system->processor.I + row];
+//
+//        for (unsigned int col = 0; col < 8; ++col)
+//        {
+//            uint8_t spritePixel = spriteByte & (0x80u >> col);
+//            uint32_t screenPixel = system->display[(yPos + row) * 64 + (xPos + col)];
+//
+//            // Sprite pixel is on
+//            if (spritePixel)
+//            {
+//                // Screen pixel also on - collision
+//                if (screenPixel == 1)
+//                {
+//                    registers[0xF] = 1;
+//                }
+//
+//                // Effectively XOR with the sprite pixel
+//                printf("%i %i\n", Display_LinearCoordinate(xPos + col, yPos + row), (yPos + row) * 64 + (xPos + col));
+//                system->display[(yPos + row) * 64 + (xPos + col)] ^= 1;
+//            }
+//        }
+//    }
 }
 
 void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, unsigned char N) {
@@ -178,5 +217,17 @@ void Instruction_DecimalConversion(Processor *processor, Memory memory, unsigned
     for (int i = 0; i < DIGIT_COUNT; i++) {
         memory[processor->I + DIGIT_COUNT - 1 - i] = value % 10;
         value /= 10;
+    }
+}
+
+void Instruction_StoreMemory(Processor *processor, Memory memory, unsigned char X) {
+    for (int i = 0; i < X + 1; i++) {
+        memory[processor->I + i] = processor->V[i];
+    }
+}
+
+void Instruction_LoadMemory(Processor *processor, Memory memory, unsigned char X) {
+    for (int i = 0; i < X + 1; i++) {
+        processor->V[i] = memory[processor->I + i];
     }
 }

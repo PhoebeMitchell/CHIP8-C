@@ -23,17 +23,16 @@ System System_Create() {
 
 void System_Execute(System *system, DecodedInstruction decodedInstruction) {
     switch (decodedInstruction.op) {
-        case 0x0:
-            switch (decodedInstruction.Y) {
-                case 0xE:
-                    switch(decodedInstruction.N) {
-                        case 0x0:
-                            Display_Clear(system->display);
-                            break;
-                        case 0xE:
-                            Instruction_SubroutineReturn(system);
-                            break;
-                    }
+        case 0x0: {
+            unsigned char nn = NN(decodedInstruction.Y, decodedInstruction.N);
+            switch (nn) {
+                case 0xE0:
+                    Instruction_Clear(system->display);
+                    break;
+                case 0xEE:
+                    Instruction_SubroutineReturn(system);
+                    break;
+                }
             }
             break;
         case 0x1:
@@ -52,7 +51,7 @@ void System_Execute(System *system, DecodedInstruction decodedInstruction) {
             Instruction_SkipEqual_VX_VY(system, decodedInstruction);
             break;
         case 0x6:
-            Instruction_Set_NN(system, decodedInstruction);
+            Instruction_Set_NN(&system->processor, decodedInstruction.X, decodedInstruction.Y, decodedInstruction.N);
             break;
         case 0x7:
             Instruction_Add_NN(system, decodedInstruction);
@@ -92,7 +91,7 @@ void System_Execute(System *system, DecodedInstruction decodedInstruction) {
             Instruction_NotSkipEqual_VX_VY(system, decodedInstruction);
             break;
         case 0xA:
-            Instruction_SetIndex(system, decodedInstruction);
+            Instruction_SetIndex(&system->processor, decodedInstruction.X, decodedInstruction.Y, decodedInstruction.N);
             break;
         case 0xB:
             Instruction_JumpWithOffset(&system->processor, decodedInstruction);
@@ -129,6 +128,12 @@ void System_Execute(System *system, DecodedInstruction decodedInstruction) {
                     break;
                 case 0x33:
                     Instruction_DecimalConversion(&system->processor, system->memory, decodedInstruction.X);
+                    break;
+                case 0x55:
+                    Instruction_StoreMemory(&system->processor, system->memory, decodedInstruction.X);
+                    break;
+                case 0x65:
+                    Instruction_LoadMemory(&system->processor, system->memory, decodedInstruction.X);
                     break;
             }
             break;

@@ -10,11 +10,10 @@
 #define PIXEL_OFF 0
 #define PIXEL_ON 1
 
-#define Display_LinearCoordinate(x, y) y * DISPLAY_WIDTH + x
-
 typedef char Display[DISPLAY_WIDTH * DISPLAY_HEIGHT];
 
 void Display_Clear(Display display);
 void Display_Set(Display display, int x, int y, char value);
+int Display_LinearCoordinate(int x, int y);
 
 #endif //CHIP8_C_DISPLAY_H

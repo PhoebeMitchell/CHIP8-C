@@ -9,6 +9,32 @@
 const int TEST_ADDRESS = 0;
 System testSystem;
 
+void Test_Clear() {
+    const unsigned char testDisplay[DISPLAY_WIDTH * DISPLAY_HEIGHT] = {0};
+    for (int i = 0; i < DISPLAY_HEIGHT * DISPLAY_HEIGHT; i++) {
+        testSystem.display[i] = 1;
+    }
+    Instruction_Clear(testSystem.display);
+    TEST_ASSERT_EQUAL_CHAR_ARRAY(testDisplay, testSystem.display, DISPLAY_WIDTH * DISPLAY_HEIGHT);
+}
+
+void Test_Set_NN() {
+    const unsigned char TEST_Y = 5;
+    const unsigned char TEST_N = 6;
+    const unsigned char EXPECTED_RESULT = 0x56;
+    Instruction_Set_NN(&testSystem.processor, TEST_ADDRESS, TEST_Y, TEST_N);
+    TEST_ASSERT_EQUAL_CHAR(EXPECTED_RESULT, testSystem.processor.V[TEST_ADDRESS]);
+}
+
+void Test_SetIndex() {
+    const unsigned char TEST_X = 4;
+    const unsigned char TEST_Y = 5;
+    const unsigned char TEST_N = 6;
+    const unsigned char EXPECTED_RESULT = 0x456;
+    Instruction_SetIndex(&testSystem.processor, TEST_X, TEST_Y, TEST_N);
+    TEST_ASSERT_EQUAL_CHAR(EXPECTED_RESULT, testSystem.processor.I);
+}
+
 void Test_SkipIfKey() {
     for (int i = 0; i < KEYPAD_SIZE; i++) {
         testSystem.processor.pc = PROGRAM_ADDRESS;
@@ -86,6 +112,25 @@ void Test_DecimalConversion() {
     TEST_ASSERT_EQUAL_CHAR(3, testSystem.memory[testSystem.processor.I + 2]);
 }
 
+void Test_StoreMemory() {
+    for (int i = 0; i < REGISTER_SIZE; i++) {
+        testSystem.processor.V[i] = i;
+    }
+    Instruction_StoreMemory(&testSystem.processor, testSystem.memory, REGISTER_SIZE);
+    for (int i = 0; i < REGISTER_SIZE; i++) {
+        TEST_ASSERT_EQUAL_INT(i, testSystem.memory[testSystem.processor.I + i]);
+    }
+}
+
+void Test_LoadMemory() {
+    for (int i = 0; i < REGISTER_SIZE; i++) {
+        testSystem.memory[i] = i;
+    }
+    Instruction_LoadMemory(&testSystem.processor, testSystem.memory, REGISTER_SIZE);
+    for (int i = 0; i < REGISTER_SIZE; i++) {
+        TEST_ASSERT_EQUAL_INT(i, testSystem.processor.V[i]);
+    }
+}
 
 void setUp() {
     testSystem = System_Create();
@@ -97,6 +142,9 @@ void tearDown() {
 
 int main() {
     UNITY_BEGIN();
+    RUN_TEST(Test_Clear);
+    RUN_TEST(Test_Set_NN);
+    RUN_TEST(Test_SetIndex);
     RUN_TEST(Test_SkipIfKey);
     RUN_TEST(Test_SetVXToDelayTimer);
     RUN_TEST(Test_SetDelayTimerToVX);
@@ -105,5 +153,7 @@ int main() {
     RUN_TEST(Test_GetKey);
     RUN_TEST(Test_FontCharacter);
     RUN_TEST(Test_DecimalConversion);
+    RUN_TEST(Test_StoreMemory);
+    RUN_TEST(Test_LoadMemory);
     return UNITY_END();
 }

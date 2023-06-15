@@ -14,3 +14,7 @@ void Display_Clear(Display display) {
 void Display_Set(Display display, int x, int y, char value) {
     display[Display_LinearCoordinate(x, y)] = value;
 }
+
+int Display_LinearCoordinate(int x, int y){
+    return y * DISPLAY_WIDTH + x;
+}
