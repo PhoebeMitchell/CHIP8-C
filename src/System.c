@@ -74,13 +74,13 @@ void System_Execute(System *system, DecodedInstruction decodedInstruction) {
                     Instruction_Add_VY(&system->processor, decodedInstruction);
                     break;
                 case 0x5:
-                    Instruction_Subtract(&system->processor, decodedInstruction);
+                    Instruction_Subtract_VY_From_VX(&system->processor, decodedInstruction.X, decodedInstruction.Y);
                     break;
                 case 0x6:
                     Instruction_ShiftRight(&system->processor, decodedInstruction);
                     break;
                 case 0x7:
-                    Instruction_Subtract(&system->processor, decodedInstruction);
+                    Instruction_Subtract_VX_From_VY(&system->processor, decodedInstruction.X, decodedInstruction.Y);
                     break;
                 case 0xE:
                     Instruction_ShiftLeft(&system->processor, decodedInstruction);

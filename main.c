@@ -3,7 +3,7 @@
 
 const char* WINDOW_NAME = "CHIP8";
 const float WINDOW_SCALE = 10;
-const float WINDOW_FPS = 60;
+const float WINDOW_FPS = 120;
 
 int main(int argc, char *argv[]) {
     if (argc <= 1) {

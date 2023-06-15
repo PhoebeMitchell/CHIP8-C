@@ -29,7 +29,8 @@ void Instruction_BinaryOR(Processor *processor, DecodedInstruction decodedInstru
 void Instruction_BinaryAND(Processor *processor, DecodedInstruction decodedInstruction);
 void Instruction_LogicalXOR(Processor *processor, DecodedInstruction decodedInstruction);
 void Instruction_Add_VY(Processor *processor, DecodedInstruction decodedInstruction);
-void Instruction_Subtract(Processor *processor, DecodedInstruction decodedInstruction);
+void Instruction_Subtract_VY_From_VX(Processor *processor, unsigned char X, unsigned char Y);
+void Instruction_Subtract_VX_From_VY(Processor *processor, unsigned char X, unsigned char Y);
 void Instruction_ShiftLeft(Processor *processor, DecodedInstruction decodedInstruction);
 void Instruction_ShiftRight(Processor *processor, DecodedInstruction decodedInstruction);
 void Instruction_JumpWithOffset(Processor *processor, DecodedInstruction decodedInstruction);

@@ -89,19 +89,25 @@ void Instruction_Add_VY(Processor *processor, DecodedInstruction decodedInstruct
     processor->V[0xF] = processor->V[decodedInstruction.X] < oldValue ? 1 : 0;
 }
 
-void Instruction_Subtract(Processor *processor, DecodedInstruction decodedInstruction) {
-    processor->V[decodedInstruction.X] = processor->V[decodedInstruction.Y] - processor->V[decodedInstruction.X];
-    processor->V[0xF] = decodedInstruction.Y >= decodedInstruction.X ? 1 : 0;
+void Instruction_Subtract_VY_From_VX(Processor *processor, unsigned char X, unsigned char Y) {
+    unsigned char oldValue = processor->V[X];
+    processor->V[X] = processor->V[X] - processor->V[Y];
+    processor->V[0xF] = oldValue > processor->V[Y] ? 1 : 0;
+}
+
+void Instruction_Subtract_VX_From_VY(Processor *processor, unsigned char X, unsigned char Y) {
+    processor->V[X] = processor->V[Y] - processor->V[X];
+    processor->V[0xF] = processor->V[Y] > processor->V[X] ? 1 : 0;
 }
 
 void Instruction_ShiftLeft(Processor *processor, DecodedInstruction decodedInstruction) {
-    processor->V[decodedInstruction.X] = processor->V[decodedInstruction.Y];
-    processor->V[0xF] = processor->V[decodedInstruction.X] & 0x8;
+//    processor->V[decodedInstruction.X] = processor->V[decodedInstruction.Y];
+    processor->V[0xF] = (processor->V[decodedInstruction.X] & 0x8) >> 7;
     processor->V[decodedInstruction.X] <<= 1;
 }
 
 void Instruction_ShiftRight(Processor *processor, DecodedInstruction decodedInstruction) {
-    processor->V[decodedInstruction.X] = processor->V[decodedInstruction.Y];
+//    processor->V[decodedInstruction.X] = processor->V[decodedInstruction.Y];
     processor->V[0xF] = processor->V[decodedInstruction.X] & 0x1;
     processor->V[decodedInstruction.X] >>= 1;
 }
