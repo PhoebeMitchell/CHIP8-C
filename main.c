@@ -22,13 +22,6 @@ int main(int argc, char *argv[]) {
 
     while (system.window.isOpen) {
         System_Update(&system);
-//        for (int y = 0; y < DISPLAY_HEIGHT; y++) {
-//            for (int x = 0; x < DISPLAY_WIDTH; x++) {
-//                printf("%i", system.display[Display_LinearCoordinate(x, y)]);
-//            }
-//            printf("\n");
-//        }
-//        printf("\n");
     }
     return 0;
 }
