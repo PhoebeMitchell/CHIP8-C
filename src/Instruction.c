@@ -2,6 +2,8 @@
 // Created by Phoebe Mitchell on 15/06/2023.
 //
 
+#include <stdlib.h>
+#include <printf.h>
 #include "Instruction.h"
 
 #define NN(Y, N) ((Y << 4) | N)
@@ -125,6 +127,17 @@ void Instruction_Display(System *system, DecodedInstruction decodedInstruction) 
     }
 }
 
-void Instruction_SkipIfKey(System *system, DecodedInstruction decodedInstruction) {
-    
+void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, unsigned char N) {
+    unsigned char nn = NN(Y, N);
+    unsigned char keyPressed = system->keypad[system->processor.V[X]];
+    if (nn == 0x9E) {
+        printf("A\n");
+        if (keyPressed) {
+            system->processor.pc++;
+        }
+    } else if (nn == 0xA1) {
+        if (!keyPressed) {
+            system->processor.pc++;
+        }
+    }
 }

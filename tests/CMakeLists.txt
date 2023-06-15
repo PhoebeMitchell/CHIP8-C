@@ -2,13 +2,16 @@ add_executable(memoryTests MemoryTests.c ../src/Architecture/Memory.h ../src/Arc
 add_executable(stackTests StackTests.c ../src/Architecture/Stack.h ../src/Architecture/Stack.c)
 add_executable(processorTests ProcessorTests.c ../src/Architecture/Processor.h ../src/Architecture/Processor.c ../src/Architecture/Memory.h ../src/Architecture/Memory.c)
 add_executable(displayTests DisplayTests.c ../src/Architecture/Display.h ../src/Architecture/Display.c)
+add_executable(instructionTests InstructionTests.c ../src/Instruction.h ../src/Instruction.c ../src/Architecture/Display.h ../src/Architecture/Display.c ../src/Architecture/Stack.h ../src/Architecture/Stack.c ../src/Architecture/KeyPad.h ../src/Architecture/KeyPad.c ../src/System.h ../src/System.c ../src/Architecture/Memory.h ../src/Architecture/Memory.c ../src/Architecture/Processor.h ../src/Architecture/Processor.c ../src/Architecture/Display.c ../src/Architecture/Display.h)
 
 target_link_libraries(memoryTests Unity)
 target_link_libraries(stackTests Unity)
 target_link_libraries(processorTests Unity)
 target_link_libraries(displayTests Unity)
+target_link_libraries(instructionTests Unity)
 
 add_test(MemoryTests memoryTests)
 add_test(StackTests stackTests)
 add_test(ProcessorTests processorTests)
 add_test(DisplayTests displayTests)
+add_test(InstructionTests instructionTests)

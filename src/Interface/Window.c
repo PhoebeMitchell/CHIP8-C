@@ -4,6 +4,8 @@
 
 #include "Window.h"
 
+const SDL_Color CLEAR_COLOR = (SDL_Color) {0, 0, 0, 0};
+
 int Window_Initialise() {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         printf("Failed to initialise SDL: %s\n", SDL_GetError());
@@ -12,16 +14,17 @@ int Window_Initialise() {
     return -1;
 }
 
-int Window_Create(Window *window, char *title, int width, int height, int scale) {
-    SDL_CreateWindowAndRenderer(width * scale, height * scale, 0, &window->window, &window->renderer);
-    if (window->window == NULL || window->renderer == NULL) {
+Window Window_Create(char *title, int width, int height, int scale) {
+    Window window;
+    SDL_CreateWindowAndRenderer(width * scale, height * scale, 0, &window.window, &window.renderer);
+    if (window.window == NULL || window.renderer == NULL) {
         printf("Failed to create SDL window and renderer: %s\n", SDL_GetError());
-        return -1;
+        return window;
     }
-    SDL_SetWindowTitle(window->window, title);
-    window->isOpen = 1;
-    window->scale = scale;
-    return 0;
+    SDL_SetWindowTitle(&window, title);
+    window.isOpen = 1;
+    window.scale = scale;
+    return window;
 }
 
 void Window_Close(Window *window) {
@@ -64,4 +67,17 @@ void Window_DrawDisplay(Window *window, char *display) {
         int value = 255 * display[i];
         Window_SetPixel(window, i - (row * DISPLAY_WIDTH), row, value, value, value, value);
     }
+}
+
+void Window_Update(Window *window, Display *display) {
+    Window_PollEvents(window);
+    Uint64 time = SDL_GetTicks64();
+    if (window->updateData.lastUpdate + window->updateData.interval > time) {
+        return;
+    }
+    Window_Clear(window, CLEAR_COLOR);
+    window->updateData.lastUpdate = time;
+
+    Window_DrawDisplay(window, display);
+    Window_Present(window);
 }

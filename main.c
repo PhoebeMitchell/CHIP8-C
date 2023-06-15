@@ -1,4 +1,9 @@
 #include "src/System.h"
+#include "src/Interface/Window.h"
+
+const char* WINDOW_NAME = "CHIP8";
+const float WINDOW_SCALE = 10;
+const float WINDOW_FPS = 60;
 
 int main(int argc, char *argv[]) {
     if (argc <= 1) {
@@ -14,14 +19,21 @@ int main(int argc, char *argv[]) {
 
     System system = System_Create();
 
+    Window_Initialise();
+    Window window = Window_Create((char*)WINDOW_NAME, DISPLAY_WIDTH, DISPLAY_HEIGHT, WINDOW_SCALE);
+    window.updateData.interval = 1000.0f / WINDOW_FPS;
+    window.updateData.lastUpdate = SDL_GetTicks64();
+
     int counter = PROGRAM_ADDRESS;
     while (fscanf(file, "%c%c ", &system.memory[counter], &system.memory[counter + 1]) != EOF) {
         counter += 2;
     }
     fclose(file);
 
-    while (system.window.isOpen) {
+    while (window.isOpen) {
         System_Update(&system);
+        Window_Update(&window, &system.display);
     }
+    Window_Close(&window);
     return 0;
 }

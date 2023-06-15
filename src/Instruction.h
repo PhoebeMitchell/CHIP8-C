@@ -28,6 +28,6 @@ void Instruction_ShiftRight(Processor *processor, DecodedInstruction decodedInst
 void Instruction_JumpWithOffset(Processor *processor, DecodedInstruction decodedInstruction);
 void Instruction_Random(Processor *processor, DecodedInstruction decodedInstruction);
 void Instruction_Display(System *system, DecodedInstruction decodedInstruction);
-void Instruction_SkipIfKey(System *system, DecodedInstruction decodedInstruction);
+void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, unsigned char N);
 
 #endif //CHIP8_C_INSTRUCTION_H

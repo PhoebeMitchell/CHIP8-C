@@ -8,18 +8,19 @@
 const int TEST_FREQUENCY = 700;
 const unsigned char TEST_MEMORY_VALUE_A = 0xF1;
 const unsigned char TEST_MEMORY_VALUE_NN = 0x8E;
+const int EXPECTED_PROGRAM_ADDRESS = 512;
 
 Processor processor;
 
 void test_Create() {
     TEST_ASSERT_EQUAL_INT(TEST_FREQUENCY, processor.frequency);
-    TEST_ASSERT_EQUAL_INT(0, processor.pc);
+    TEST_ASSERT_EQUAL_INT(EXPECTED_PROGRAM_ADDRESS, processor.pc);
 }
 
 void test_Fetch() {
     Memory memory;
-    memory[0] = TEST_MEMORY_VALUE_A;
-    memory[1] = TEST_MEMORY_VALUE_NN;
+    memory[EXPECTED_PROGRAM_ADDRESS] = TEST_MEMORY_VALUE_A;
+    memory[EXPECTED_PROGRAM_ADDRESS + 1] = TEST_MEMORY_VALUE_NN;
     Instruction instruction = Processor_Fetch(&processor, memory);
     TEST_ASSERT_EQUAL_CHAR(TEST_MEMORY_VALUE_A, instruction.a);
     TEST_ASSERT_EQUAL_CHAR(TEST_MEMORY_VALUE_NN, instruction.NN);
