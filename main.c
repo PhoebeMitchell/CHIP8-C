@@ -25,8 +25,9 @@ int main(int argc, char *argv[]) {
     window.updateData.lastUpdate = SDL_GetTicks64();
 
     int counter = PROGRAM_ADDRESS;
-    while (fscanf(file, "%c%c ", &system.memory[counter], &system.memory[counter + 1]) != EOF) {
-        counter += 2;
+    int value;
+    while (fscanf(file, "%c", &value) != EOF) {
+        system.memory[counter++] = value;
     }
     fclose(file);
 

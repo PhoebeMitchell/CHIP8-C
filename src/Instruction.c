@@ -3,7 +3,6 @@
 //
 
 #include <stdlib.h>
-#include <printf.h>
 #include "Instruction.h"
 #include "Font.h"
 
@@ -34,25 +33,25 @@ void Instruction_Subroutine(System *system, DecodedInstruction decodedInstructio
 
 void Instruction_SkipEqual_VX_NN(System *system, DecodedInstruction decodedInstruction) {
     if (system->processor.V[decodedInstruction.X] == NN(decodedInstruction.Y, decodedInstruction.N)) {
-        system->processor.pc++;
+        system->processor.pc += 2;
     }
 }
 
 void Instruction_SkipNotEqual_VX_NN(System *system, DecodedInstruction decodedInstruction) {
     if (system->processor.V[decodedInstruction.X] != NN(decodedInstruction.Y, decodedInstruction.N)) {
-        system->processor.pc++;
+        system->processor.pc += 2;
     }
 }
 
 void Instruction_SkipEqual_VX_VY(System *system, DecodedInstruction decodedInstruction) {
     if (system->processor.V[decodedInstruction.X] == system->processor.V[decodedInstruction.Y]) {
-        system->processor.pc++;
+        system->processor.pc += 2;
     }
 }
 
 void Instruction_NotSkipEqual_VX_VY(System *system, DecodedInstruction decodedInstruction) {
     if (system->processor.V[decodedInstruction.X] != system->processor.V[decodedInstruction.Y]) {
-        system->processor.pc++;
+        system->processor.pc += 2;
     }
 }
 
@@ -142,11 +141,11 @@ void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, uns
     unsigned char keyPressed = system->keypad[system->processor.V[X]];
     if (nn == 0x9E) {
         if (keyPressed) {
-            system->processor.pc++;
+            system->processor.pc += 2;
         }
     } else if (nn == 0xA1) {
         if (!keyPressed) {
-            system->processor.pc++;
+            system->processor.pc += 2;
         }
     }
 }
@@ -177,7 +176,7 @@ void Instruction_GetKey(Processor *processor, Keypad keypad, unsigned char X) {
             return;
         }
     }
-    processor->pc--;
+    processor->pc -= 2;
 }
 
 void Instruction_FontCharacter(Processor *processor, Memory memory, unsigned char X) {
