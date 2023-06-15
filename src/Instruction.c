@@ -127,41 +127,6 @@ void Instruction_Display(System *system, DecodedInstruction decodedInstruction) 
             }
         }
     }
-//    uint8_t Vx = decodedInstruction.X;
-//    uint8_t Vy = decodedInstruction.Y;
-//    uint8_t height = decodedInstruction.N;
-//
-//    unsigned char *registers = system->processor.V;
-//    // Wrap if going beyond screen boundaries
-//    uint8_t xPos = registers[Vx] % 64;
-//    uint8_t yPos = registers[Vy] % 32;
-//
-//    registers[0xF] = 0;
-//
-//    for (unsigned int row = 0; row < height; ++row)
-//    {
-//        uint8_t spriteByte = system->memory[system->processor.I + row];
-//
-//        for (unsigned int col = 0; col < 8; ++col)
-//        {
-//            uint8_t spritePixel = spriteByte & (0x80u >> col);
-//            uint32_t screenPixel = system->display[(yPos + row) * 64 + (xPos + col)];
-//
-//            // Sprite pixel is on
-//            if (spritePixel)
-//            {
-//                // Screen pixel also on - collision
-//                if (screenPixel == 1)
-//                {
-//                    registers[0xF] = 1;
-//                }
-//
-//                // Effectively XOR with the sprite pixel
-//                printf("%i %i\n", Display_LinearCoordinate(xPos + col, yPos + row), (yPos + row) * 64 + (xPos + col));
-//                system->display[(yPos + row) * 64 + (xPos + col)] ^= 1;
-//            }
-//        }
-//    }
 }
 
 void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, unsigned char N) {
