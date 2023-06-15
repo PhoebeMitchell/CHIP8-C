@@ -7,6 +7,9 @@
 
 #include "System.h"
 
+#define NN(Y, N) ((Y << 4) | N)
+#define NNN(X, Y, N) ((X << 8) | (Y << 4) | N)
+
 void Instruction_SubroutineReturn(System *system);
 void Instruction_Jump(System *system, DecodedInstruction decodedInstruction);
 void Instruction_Subroutine(System *system, DecodedInstruction decodedInstruction);
@@ -29,5 +32,12 @@ void Instruction_JumpWithOffset(Processor *processor, DecodedInstruction decoded
 void Instruction_Random(Processor *processor, DecodedInstruction decodedInstruction);
 void Instruction_Display(System *system, DecodedInstruction decodedInstruction);
 void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, unsigned char N);
+void Instruction_SetVXToDelayTimer(System *system, unsigned char X);
+void Instruction_SetDelayTimerToVX(System *system, unsigned char X);
+void Instruction_SetSoundTimerToVX(System *system, unsigned char X);
+void Instruction_AddToIndex(Processor *processor, unsigned char X);
+void Instruction_GetKey(Processor *processor, Keypad keypad, unsigned char X);
+void Instruction_FontCharacter(Processor *processor, Memory memory, unsigned char X);
+void Instruction_DecimalConversion(Processor *processor, Memory memory, unsigned char X);
 
 #endif //CHIP8_C_INSTRUCTION_H

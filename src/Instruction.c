@@ -5,9 +5,7 @@
 #include <stdlib.h>
 #include <printf.h>
 #include "Instruction.h"
-
-#define NN(Y, N) ((Y << 4) | N)
-#define NNN(X, Y, N) ((X << 8) | (Y << 4) | N)
+#include "Font.h"
 
 void Instruction_SubroutineReturn(System *system) {
     system->processor.pc = Stack_Pop(&system->stack);
@@ -131,7 +129,6 @@ void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, uns
     unsigned char nn = NN(Y, N);
     unsigned char keyPressed = system->keypad[system->processor.V[X]];
     if (nn == 0x9E) {
-        printf("A\n");
         if (keyPressed) {
             system->processor.pc++;
         }
@@ -139,5 +136,47 @@ void Instruction_SkipIfKey(System *system, unsigned char X, unsigned char Y, uns
         if (!keyPressed) {
             system->processor.pc++;
         }
+    }
+}
+
+void Instruction_SetVXToDelayTimer(System *system, unsigned char X) {
+    system->processor.V[X] = system->delayTimer;
+}
+
+void Instruction_SetDelayTimerToVX(System *system, unsigned char X) {
+    system->delayTimer = system->processor.V[X];
+}
+
+void Instruction_SetSoundTimerToVX(System *system, unsigned char X) {
+    system->soundTimer = system->processor.V[X];
+}
+
+void Instruction_AddToIndex(Processor *processor, unsigned char X) {
+    processor->I += processor->V[X];
+    if (processor->I >= MEMORY_SIZE) {
+        processor->V[0xF] = 1;
+    }
+}
+
+void Instruction_GetKey(Processor *processor, Keypad keypad, unsigned char X) {
+    for (int i = 0; i < KEYPAD_SIZE; i++) {
+        if (keypad[i]) {
+            processor->V[X] = i;
+            return;
+        }
+    }
+    processor->pc--;
+}
+
+void Instruction_FontCharacter(Processor *processor, Memory memory, unsigned char X) {
+    processor->I = memory[FONT_SET_ADDRESS + processor->V[X]];
+}
+
+void Instruction_DecimalConversion(Processor *processor, Memory memory, unsigned char X) {
+    unsigned char value = processor->V[X];
+    const int DIGIT_COUNT = 3;
+    for (int i = 0; i < DIGIT_COUNT; i++) {
+        memory[processor->I + DIGIT_COUNT - 1 - i] = value % 10;
+        value /= 10;
     }
 }

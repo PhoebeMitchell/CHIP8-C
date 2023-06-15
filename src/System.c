@@ -106,6 +106,32 @@ void System_Execute(System *system, DecodedInstruction decodedInstruction) {
         case 0xE:
             Instruction_SkipIfKey(system, decodedInstruction.X, decodedInstruction.Y, decodedInstruction.N);
             break;
+        case 0xF:;
+            unsigned char nn = NN(decodedInstruction.Y, decodedInstruction.N);
+            switch (nn) {
+                case 0x07:
+                    Instruction_SetVXToDelayTimer(system, decodedInstruction.X);
+                    break;
+                case 0x15:
+                    Instruction_SetDelayTimerToVX(system, decodedInstruction.X);
+                    break;
+                case 0x18:
+                    Instruction_SetSoundTimerToVX(system, decodedInstruction.X);
+                    break;
+                case 0x1E:
+                    Instruction_AddToIndex(&system->processor, decodedInstruction.X);
+                    break;
+                case 0x0A:
+                    Instruction_GetKey(&system->processor, system->keypad, decodedInstruction.X);
+                    break;
+                case 0x29:
+                    Instruction_FontCharacter(&system->processor, system->memory, decodedInstruction.X);
+                    break;
+                case 0x33:
+                    Instruction_DecimalConversion(&system->processor, system->memory, decodedInstruction.X);
+                    break;
+            }
+            break;
     }
 }
 

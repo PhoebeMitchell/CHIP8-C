@@ -2,7 +2,7 @@ add_executable(memoryTests MemoryTests.c ../src/Architecture/Memory.h ../src/Arc
 add_executable(stackTests StackTests.c ../src/Architecture/Stack.h ../src/Architecture/Stack.c)
 add_executable(processorTests ProcessorTests.c ../src/Architecture/Processor.h ../src/Architecture/Processor.c ../src/Architecture/Memory.h ../src/Architecture/Memory.c)
 add_executable(displayTests DisplayTests.c ../src/Architecture/Display.h ../src/Architecture/Display.c)
-add_executable(instructionTests InstructionTests.c ../src/Instruction.h ../src/Instruction.c ../src/Architecture/Display.h ../src/Architecture/Display.c ../src/Architecture/Stack.h ../src/Architecture/Stack.c ../src/Architecture/KeyPad.h ../src/Architecture/KeyPad.c ../src/System.h ../src/System.c ../src/Architecture/Memory.h ../src/Architecture/Memory.c ../src/Architecture/Processor.h ../src/Architecture/Processor.c ../src/Architecture/Display.c ../src/Architecture/Display.h)
+add_executable(instructionTests InstructionTests.c ../src/Instruction.h ../src/Instruction.c ../src/Architecture/Display.h ../src/Architecture/Display.c ../src/Architecture/Stack.h ../src/Architecture/Stack.c ../src/Architecture/KeyPad.h ../src/Architecture/KeyPad.c ../src/System.h ../src/System.c ../src/Architecture/Memory.h ../src/Architecture/Memory.c ../src/Architecture/Processor.h ../src/Architecture/Processor.c ../src/Architecture/Display.c ../src/Architecture/Display.h ../src/Font.h)
 
 target_link_libraries(memoryTests Unity)
 target_link_libraries(stackTests Unity)

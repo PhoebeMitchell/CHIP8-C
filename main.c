@@ -34,7 +34,6 @@ int main(int argc, char *argv[]) {
         if (Window_ShouldUpdate(&window)) {
             System_Update(&system);
             Window_Update(&window, system.display);
-            printf("A");
         }
     }
     Window_Close(&window);
