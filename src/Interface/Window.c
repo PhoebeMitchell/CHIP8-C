@@ -61,7 +61,7 @@ void Window_Clear(Window *window, SDL_Color clearColor) {
     SDL_RenderClear(window->renderer);
 }
 
-void Window_DrawDisplay(Window *window, char *display) {
+void Window_DrawDisplay(Window *window, Display display) {
     for (int i = 0; i < DISPLAY_HEIGHT * DISPLAY_WIDTH; i++) {
         int row = i / DISPLAY_WIDTH;
         int value = 255 * display[i];
@@ -69,15 +69,18 @@ void Window_DrawDisplay(Window *window, char *display) {
     }
 }
 
-void Window_Update(Window *window, Display *display) {
+char Window_ShouldUpdate(Window *window) {
     Window_PollEvents(window);
     Uint64 time = SDL_GetTicks64();
-    if (window->updateData.lastUpdate + window->updateData.interval > time) {
-        return;
+    if (window->updateData.lastUpdate + window->updateData.interval <= time) {
+        window->updateData.lastUpdate = time;
+        return 1;
     }
-    Window_Clear(window, CLEAR_COLOR);
-    window->updateData.lastUpdate = time;
+    return 0;
+}
 
+void Window_Update(Window *window, Display display) {
+    Window_Clear(window, CLEAR_COLOR);
     Window_DrawDisplay(window, display);
     Window_Present(window);
 }

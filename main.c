@@ -31,8 +31,11 @@ int main(int argc, char *argv[]) {
     fclose(file);
 
     while (window.isOpen) {
-        System_Update(&system);
-        Window_Update(&window, &system.display);
+        if (Window_ShouldUpdate(&window)) {
+            System_Update(&system);
+            Window_Update(&window, system.display);
+            printf("A");
+        }
     }
     Window_Close(&window);
     return 0;

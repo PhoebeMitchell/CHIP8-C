@@ -29,6 +29,7 @@ void Window_Present(Window *window);
 void Window_DrawDisplay(Window *window, Display display);
 void Window_SetPixel(Window *window, int x, int y, int r, int g, int b, int a);
 void Window_Clear(Window *window, SDL_Color clearColor);
-void Window_Update(Window *window, Display *display);
+void Window_Update(Window *window, Display display);
+char Window_ShouldUpdate(Window *window);
 
 #endif //CHIP8_C_WINDOW_H
