@@ -7,8 +7,11 @@
 
 #include "System.h"
 
-#define NN(Y, N) ((Y << 4) | N)
-#define NNN(X, Y, N) ((X << 8) | (Y << 4) | N)
+//#define NN(Y, N) ((Y << 4) | N)
+//#define NNN(X, Y, N) ((X << 8) | (Y << 4) | N)
+
+unsigned char NN(unsigned char y, unsigned char n);
+int NNN(unsigned char x, unsigned char y, unsigned char n);
 
 void Instruction_Clear(Display display);
 void Instruction_SubroutineReturn(System *system);

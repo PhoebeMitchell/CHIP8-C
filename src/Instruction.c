@@ -7,6 +7,14 @@
 #include "Instruction.h"
 #include "Font.h"
 
+unsigned char NN(unsigned char y, unsigned char n) {
+    return (y << 4) | n;
+}
+
+int NNN(unsigned char x, unsigned char y, unsigned char n) {
+    return (x << 8) | (y << 4) | n;
+}
+
 void Instruction_Clear(Display display) {
     Display_Clear(display);
 }
