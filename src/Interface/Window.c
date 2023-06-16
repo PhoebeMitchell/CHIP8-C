@@ -33,7 +33,60 @@ void Window_Close(Window *window) {
     SDL_Quit();
 }
 
-void Window_PollEvents(Window *window) {
+void Window_SetKey(int scancode, int value, Keypad keypad) {
+    switch (scancode) {
+        case SDL_SCANCODE_1:
+            keypad[0] = value;
+            break;
+        case SDL_SCANCODE_2:
+            keypad[1] = value;
+            break;
+        case SDL_SCANCODE_3:
+            keypad[2] = value;
+            break;
+        case SDL_SCANCODE_4:
+            keypad[3] = value;
+            break;
+        case SDL_SCANCODE_Q:
+            keypad[4] = value;
+            break;
+        case SDL_SCANCODE_W:
+            keypad[5] = value;
+            break;
+        case SDL_SCANCODE_E:
+            keypad[6] = value;
+            break;
+        case SDL_SCANCODE_R:
+            keypad[7] = value;
+            break;
+        case SDL_SCANCODE_A:
+            keypad[8] = value;
+            break;
+        case SDL_SCANCODE_S:
+            keypad[9] = value;
+            break;
+        case SDL_SCANCODE_D:
+            keypad[10] = value;
+            break;
+        case SDL_SCANCODE_F:
+            keypad[11] = value;
+            break;
+        case SDL_SCANCODE_Z:
+            keypad[12] = value;
+            break;
+        case SDL_SCANCODE_X:
+            keypad[13] = value;
+            break;
+        case SDL_SCANCODE_C:
+            keypad[14] = value;
+            break;
+        case SDL_SCANCODE_V:
+            keypad[15] = value;
+            break;
+    }
+}
+
+void Window_PollEvents(Window *window, Keypad keypad) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -41,6 +94,12 @@ void Window_PollEvents(Window *window) {
                 if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
                     Window_Close(window);
                 }
+                break;
+            case SDL_KEYDOWN:
+                Window_SetKey(event.key.keysym.scancode, 1, keypad);
+                break;
+            case SDL_KEYUP:
+                Window_SetKey(event.key.keysym.scancode, 0, keypad);
                 break;
         }
     }
@@ -69,8 +128,8 @@ void Window_DrawDisplay(Window *window, Display display) {
     }
 }
 
-char Window_ShouldUpdate(Window *window) {
-    Window_PollEvents(window);
+char Window_ShouldUpdate(Window *window, Keypad keypad) {
+    Window_PollEvents(window, keypad);
     Uint64 time = SDL_GetTicks64();
     if (window->updateData.lastUpdate + window->updateData.interval <= time) {
         window->updateData.lastUpdate = time;

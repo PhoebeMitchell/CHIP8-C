@@ -3,7 +3,7 @@
 
 const char* WINDOW_NAME = "CHIP8";
 const float WINDOW_SCALE = 10;
-const float WINDOW_FPS = 120;
+const float WINDOW_FPS = 300;
 
 int main(int argc, char *argv[]) {
     if (argc <= 1) {
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     fclose(file);
 
     while (window.isOpen) {
-        if (Window_ShouldUpdate(&window)) {
+        if (Window_ShouldUpdate(&window, system.keypad)) {
             System_Update(&system);
             Window_Update(&window, system.display);
         }
