@@ -7,7 +7,7 @@
 #include "Instruction.h"
 #include "Interface/Window.h"
 
-const float PROCESSOR_FREQUENCY = 1000;
+const float PROCESSOR_FREQUENCY = 700;
 
 System System_Create() {
     System system;
